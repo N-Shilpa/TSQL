@@ -1,0 +1,57 @@
+
+QUESTION1:
+
+
+CREATE FUNCTION udfProductInYear2 (
+@model_year int,
+@model_year1 INT
+
+
+
+)
+RETURNS TABLE
+AS
+RETURN
+SELECT
+order_id,
+customer_id,
+order_status,
+store_id,
+staff_id,
+order_date
+FROM
+sales.orders
+WHERE
+cast(year(order_date) as int) between @model_year and @model_year1;
+
+
+SELECT
+*
+FROM
+udfProductInYear2(2016,2177);
+
+
+QUESTION2:
+
+Create TABLE removed_data (
+    customer_id int,
+	first_name varchar(50),
+    last_name varchar(50),
+    phone varchar(12),
+	email varchar(20)
+);
+
+CREATE TRIGGER Customer_removed
+ON sales.customers
+FOR DELETE
+AS
+BEGIN
+INSERT INTO removed_data(customer_id, First_name, last_name, phone,email)
+select customer_id, first_name, last_name, phone,email from deleted
+select * from customer_removed
+END;
+
+SELECT * FROM sales.customers;
+
+DELETE from sales.customers 
+WHERE customer_id = 1;
